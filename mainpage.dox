@@ -1,0 +1,15 @@
+/**
+* @author David Desmarest
+* @date Dec. 2014
+* @mainpage TD #6 Jeu de la vie
+
+L'objectif du TD #6 est de réaliser un jeu de la vie en utilisant quelques classes GUI Qt. Le design proposé pourra être réutilisé et amélioré pour le projet
+
+* @author Tuan Nguyen
+* @date Jan. 2016
+* @mainpage Projet Minestorm
+
+Reprise du TD6 pour la réalisation du jeu Minestorm.
+Renamed TD5Framework.pro to MinestormNTuan.pro for new project
+
+*/
