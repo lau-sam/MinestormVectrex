@@ -1,6 +1,6 @@
 #include "mainwindow.h"
-#include "controller.h"
-#include "gameboard.h"
+#include "game/controller.h"
+#include "game/gameboard.h"
 #include <QVBoxLayout>
 MainWindow::MainWindow(Game *game,QWidget *parent) :
     QMainWindow(parent)

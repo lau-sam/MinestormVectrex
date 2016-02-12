@@ -9,8 +9,8 @@
 #include <QRect>
 #include <QLine>
 #include <QPainter>
-#include "spaceship.h"
-#include "mine.h"
+#include "objects/spaceship.h"
+#include "objects/mine.h"
 #include <sstream>
 
 using namespace std;

@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "minestormgame.h"
+#include "game/minestormgame.h"
 #include <QSize>
 #include <QApplication>
 

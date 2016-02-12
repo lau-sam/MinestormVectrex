@@ -10,23 +10,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    controller.cpp \
-    gameboard.cpp \
-    game.cpp \
-    minestormgame.cpp \
-    spaceship.cpp \
-    bullet.cpp \
-    mine.cpp
+    mainwindow.cpp \
+    game/controller.cpp \
+    game/game.cpp \
+    game/gameboard.cpp \
+    game/minestormgame.cpp \
+    objects/bullet.cpp \
+    objects/mine.cpp \
+    objects/spaceship.cpp
 
 HEADERS  += mainwindow.h \
-    controller.h \
-    gameboard.h \
-    game.h \
-    minestormgame.h \
-    spaceship.h \
-    bullet.h \
-    mine.h
+    game/controller.h \
+    game/game.h \
+    game/gameboard.h \
+    game/minestormgame.h \
+    objects/bullet.h \
+    objects/mine.h \
+    objects/spaceship.h
 
 FORMS    +=
 
