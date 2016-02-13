@@ -1549,7 +1549,9 @@ minestormgame.o: ../game/minestormgame.cpp ../game/minestormgame.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o minestormgame.o ../game/minestormgame.cpp
 
 bullet.o: ../objects/bullet.cpp ../objects/bullet.h \
-		/usr/include/qt5/QtCore/QPoint \
+		../objects/gameobject.h \
+		/usr/include/qt5/QtCore/QLine \
+		/usr/include/qt5/QtCore/qline.h \
 		/usr/include/qt5/QtCore/qpoint.h \
 		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qglobal.h \
@@ -1588,6 +1590,7 @@ bullet.o: ../objects/bullet.cpp ../objects/bullet.h \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/QPoint \
 		/usr/include/qt5/QtGui/QImage \
 		/usr/include/qt5/QtGui/qimage.h \
 		/usr/include/qt5/QtGui/qtransform.h \
@@ -1621,19 +1624,31 @@ bullet.o: ../objects/bullet.cpp ../objects/bullet.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
 		/usr/include/qt5/QtCore/qpair.h \
-		/usr/include/qt5/QtCore/qline.h \
 		/usr/include/qt5/QtGui/qpainterpath.h \
 		/usr/include/qt5/QtGui/qpaintdevice.h \
 		/usr/include/qt5/QtGui/qrgb.h \
 		/usr/include/qt5/QtCore/qstringlist.h \
 		/usr/include/qt5/QtCore/qregexp.h \
 		/usr/include/qt5/QtCore/qstringmatcher.h \
-		/usr/include/qt5/QtCore/QLine
+		/usr/include/qt5/QtGui/QPainter \
+		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bullet.o ../objects/bullet.cpp
 
 mine.o: ../objects/mine.cpp ../objects/mine.h \
-		/usr/include/qt5/QtCore/QPoint \
-		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/QSize \
+		/usr/include/qt5/QtCore/qsize.h \
 		/usr/include/qt5/QtCore/qnamespace.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
@@ -1671,6 +1686,11 @@ mine.o: ../objects/mine.cpp ../objects/mine.h \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
+		../objects/gameobject.h \
+		/usr/include/qt5/QtCore/QLine \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/QPoint \
 		/usr/include/qt5/QtGui/QImage \
 		/usr/include/qt5/QtGui/qimage.h \
 		/usr/include/qt5/QtGui/qtransform.h \
@@ -1683,7 +1703,6 @@ mine.o: ../objects/mine.cpp ../objects/mine.h \
 		/usr/include/qt5/QtCore/qrefcount.h \
 		/usr/include/qt5/QtCore/qarraydata.h \
 		/usr/include/qt5/QtCore/qrect.h \
-		/usr/include/qt5/QtCore/qsize.h \
 		/usr/include/qt5/QtGui/qregion.h \
 		/usr/include/qt5/QtGui/qwindowdefs.h \
 		/usr/include/qt5/QtCore/qobjectdefs.h \
@@ -1704,18 +1723,31 @@ mine.o: ../objects/mine.cpp ../objects/mine.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
 		/usr/include/qt5/QtCore/qpair.h \
-		/usr/include/qt5/QtCore/qline.h \
 		/usr/include/qt5/QtGui/qpainterpath.h \
 		/usr/include/qt5/QtGui/qpaintdevice.h \
 		/usr/include/qt5/QtGui/qrgb.h \
 		/usr/include/qt5/QtCore/qstringlist.h \
 		/usr/include/qt5/QtCore/qregexp.h \
 		/usr/include/qt5/QtCore/qstringmatcher.h \
-		/usr/include/qt5/QtCore/QLine \
-		/usr/include/qt5/QtCore/QSize
+		/usr/include/qt5/QtGui/QPainter \
+		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mine.o ../objects/mine.cpp
 
 spaceship.o: ../objects/spaceship.cpp ../objects/spaceship.h \
+		../objects/bullet.h \
+		../objects/gameobject.h \
 		/usr/include/qt5/QtCore/QLine \
 		/usr/include/qt5/QtCore/qline.h \
 		/usr/include/qt5/QtCore/qpoint.h \
@@ -1796,8 +1828,20 @@ spaceship.o: ../objects/spaceship.cpp ../objects/spaceship.h \
 		/usr/include/qt5/QtCore/qstringlist.h \
 		/usr/include/qt5/QtCore/qregexp.h \
 		/usr/include/qt5/QtCore/qstringmatcher.h \
-		../objects/bullet.h \
-		../objects/gameobject.h
+		/usr/include/qt5/QtGui/QPainter \
+		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o spaceship.o ../objects/spaceship.cpp
 
 gameobject.o: ../objects/gameobject.cpp ../objects/gameobject.h \
@@ -1880,7 +1924,21 @@ gameobject.o: ../objects/gameobject.cpp ../objects/gameobject.h \
 		/usr/include/qt5/QtGui/qrgb.h \
 		/usr/include/qt5/QtCore/qstringlist.h \
 		/usr/include/qt5/QtCore/qregexp.h \
-		/usr/include/qt5/QtCore/qstringmatcher.h
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtGui/QPainter \
+		/usr/include/qt5/QtGui/qpainter.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameobject.o ../objects/gameobject.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

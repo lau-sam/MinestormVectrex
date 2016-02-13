@@ -18,7 +18,7 @@ void MinestormGame::initialize() {
     _hearths.clear();
     _currentStyle = Qt::SolidPattern;
     //spaceship
-    _spaceShip.setImage(QImage("image/spaceship.png"));
+    _spaceShip.setImage(QImage("image/spaceships/0.png"));
     _spaceShip.setLine(QLine(500,280,500,320));
     _spaceShip.setAngle(180);
     _spaceShip.setPointSpeed(QPoint(0,0));
@@ -115,7 +115,7 @@ void MinestormGame::generateEnemy(int width, int height)
         enemy.setPointSpeed(QPoint(0,0));
         enemy.setSpeed(45);        
         std::stringstream imageAddress;
-        imageAddress << "image/enemy/"<<rand()%4<<".png";
+        imageAddress << "image/spaceships/"<<rand()%12+1<<".png";
         enemy.setImage(QImage(imageAddress.str().c_str()));
         _enemies.push_back(enemy);
         _enemyGenerateTime=rand()%150+40;
@@ -127,7 +127,7 @@ void MinestormGame::generateMines(int width, int height)
 {
     if(_enemyGenerateTime<=0)
     {
-        int currentSize = rand()%60+20;
+        int currentSize = rand()%20+20;
         int xnewb = rand()%width;
         int ynewb = rand()%height;
         QPoint p1(xnewb,ynewb+(currentSize/2));
@@ -135,7 +135,9 @@ void MinestormGame::generateMines(int width, int height)
         //new Mine
         Mine mine;
         mine.setLine(QLine(p2,p1));
-        mine.setImage(QImage("image/enemy/bomb.png"));
+        std::stringstream imageAddress;
+        imageAddress << "image/mines/"<<rand()%4<<".png";
+        mine.setImage(QImage(imageAddress.str().c_str()));
         mine.setMineSize(QSize(currentSize,currentSize));
         _mines.push_back(mine);
         _enemyGenerateTime=rand()%150+40;
@@ -345,7 +347,7 @@ void MinestormGame::drawHearth(QPainter &painter, QRect &rect)
     for(auto i=0u;i<_hearths.size();i++)
     {
         painter.drawPoint(QPoint(_hearths[i].x(),_hearths[i].y()));
-        painter.drawImage(QRect(QPoint(_hearths[i].x()-15,_hearths[i].y()-15),QSize(30,30)),QImage("image/hearth.png"));
+        painter.drawImage(QRect(QPoint(_hearths[i].x()-15,_hearths[i].y()-15),QSize(30,30)),QImage("image/objects/heart.png"));
 
         //collision test : remove hearth and spaceship _health +100 if collision
         int distance = 35;
@@ -409,7 +411,7 @@ void MinestormGame::showCinematics(QPainter &painter, QRect &rect)
     {
         painter.drawText(QRect(0,rect.height()/5,rect.width(),rect.height()), Qt::AlignHCenter, tr(presentationText.str().c_str()));
         painter.drawImage(QRect(QPoint((rect.width()/5)*2.2,(rect.height()/5)*3.5),QSize((rect.height()/5),(rect.height()/5)))
-                          ,QImage("image/spaceship.png").transformed((QMatrix().rotate(180))));
+                          ,QImage("image/spaceships/0.png").transformed((QMatrix().rotate(180))));
     }
 }
 

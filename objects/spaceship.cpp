@@ -86,7 +86,7 @@ Bullet SpaceShip::shoot()
                ,(_line.p1().y() + _line.p2().y())/2
                , _line.p2().x()
                , _line.p2().y());
-    QImage image("image/bullet.png");
+    QImage image("image/objects/bullet.png");
     Bullet mBullet(line,image);
     mBullet.setImage(mBullet.getImage().transformed(QMatrix().rotate(-_angle)));
     return mBullet;
