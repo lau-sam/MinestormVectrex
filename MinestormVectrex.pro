@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     game/minestormgame.cpp \
     objects/bullet.cpp \
     objects/mine.cpp \
-    objects/spaceship.cpp
+    objects/spaceship.cpp \
+    objects/gameobject.cpp
 
 HEADERS  += mainwindow.h \
     game/controller.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     game/minestormgame.h \
     objects/bullet.h \
     objects/mine.h \
-    objects/spaceship.h
+    objects/spaceship.h \
+    objects/gameobject.h
 
 FORMS    +=
 

@@ -3,6 +3,7 @@
 #include <QColor>
 #include <iostream>
 #include <math.h>
+#include "objects/gameobject.h"
 
 MinestormGame::MinestormGame(const QSize &size,QObject *parent):Game(size,parent), _currentStyle(Qt::SolidPattern) {
     initialize();
@@ -17,9 +18,9 @@ void MinestormGame::initialize() {
     _hearths.clear();
     _currentStyle = Qt::SolidPattern;
     //spaceship
-    _spaceShip.setShipImage(QImage("image/mario.png"));
-    _spaceShip.setShipLine(QLine(500,320,500,280));
-    _spaceShip.setDirectionAngle(180);
+    _spaceShip.setImage(QImage("image/mario.png"));
+    _spaceShip.setLine(QLine(500,320,500,280));
+    _spaceShip.setAngle(180);
     _spaceShip.setPointSpeed(QPoint(0,0));
     _spaceShip.setSpeed(45);
     //spaceship
@@ -89,11 +90,6 @@ void MinestormGame::draw(QPainter &painter, QRect &rect)
     }
 }
 
-const char * MinestormGame::boolToString(bool b)
-{
-    return b ? "true" : "false";
-}
-
 void MinestormGame::addSpaceShipBullet(Bullet bullet)
 {
     _spaceShipBullets.push_back(bullet);
@@ -114,13 +110,13 @@ void MinestormGame::generateEnemy(int width, int height)
         QPoint p2(xnewb,ynewb-20);
         //new enemy
         SpaceShip enemy;
-        enemy.setShipLine(QLine(p2,p1));
-        enemy.setDirectionAngle(0);
+        enemy.setLine(QLine(p2,p1));
+        enemy.setAngle(0);
         enemy.setPointSpeed(QPoint(0,0));
         enemy.setSpeed(45);        
         std::stringstream imageAddress;
         imageAddress << "image/enemy/"<<rand()%4<<".png";
-        enemy.setShipImage(QImage(imageAddress.str().c_str()));
+        enemy.setImage(QImage(imageAddress.str().c_str()));
         _enemies.push_back(enemy);
         _enemyGenerateTime=rand()%150+40;
     }
@@ -138,8 +134,8 @@ void MinestormGame::generateMines(int width, int height)
         QPoint p2(xnewb,ynewb-(currentSize/2));
         //new Mine
         Mine mine;
-        mine.setMineLine(QLine(p2,p1));
-        mine.setMineImage(QImage("image/enemy/bomb.png"));
+        mine.setLine(QLine(p2,p1));
+        mine.setImage(QImage("image/enemy/bomb.png"));
         mine.setMineSize(QSize(currentSize,currentSize));
         _mines.push_back(mine);
         _enemyGenerateTime=rand()%150+40;
@@ -148,35 +144,29 @@ void MinestormGame::generateMines(int width, int height)
 
 void MinestormGame::drawSpaceShip(QPainter &painter)
 {
-    //painter.drawLine(_spaceShip.getShipLine());
-    painter.drawImage(QRect(QPoint(((_spaceShip.getShipLine().p1().x()+_spaceShip.getShipLine().p2().x())/2)-20,
-                                   ((_spaceShip.getShipLine().p1().y()+_spaceShip.getShipLine().p2().y())/2)-20),QSize(40,40)),
-                      _spaceShip.getShipImage().transformed(QMatrix().rotate(-_spaceShip.getDirectionAngle())));
+    _spaceShip.draw(painter);
 
     //spaceship movs
-    auto x = (_spaceShip.getShipLine().p1().x()-_spaceShip.getShipLine().p2().x()) / _spaceShip.getSpeed();
-    auto y = (_spaceShip.getShipLine().p1().y()-_spaceShip.getShipLine().p2().y()) / _spaceShip.getSpeed();
+    auto x = (_spaceShip.getLine().p1().x()-_spaceShip.getLine().p2().x()) / _spaceShip.getSpeed();
+    auto y = (_spaceShip.getLine().p1().y()-_spaceShip.getLine().p2().y()) / _spaceShip.getSpeed();
     _spaceShip.setPointSpeed(QPoint(x,y));
-    QLine line(_spaceShip.getShipLine());
+    QLine line(_spaceShip.getLine());
     line.translate(_spaceShip.getPointSpeed());
-    _spaceShip.setShipLine(line);
+    _spaceShip.setLine(line);
     //spaceship movs
 }
 
 void MinestormGame::drawEnemies(QPainter &painter){
     for(auto i=0u;i<_enemies.size();i++)
     {
-        //painter.drawLine(_enemies[i].getShipLine());
-        painter.drawImage(QRect(QPoint(((_enemies[i].getShipLine().p1().x()+_enemies[i].getShipLine().p2().x())/2)-20,
-                                       ((_enemies[i].getShipLine().p1().y()+_enemies[i].getShipLine().p2().y())/2)-20),QSize(40,40)),
-                          _enemies[i].getShipImage().transformed(QMatrix().rotate(-_enemies[i].getDirectionAngle())));
+        _enemies[i].draw(painter);
 
         //enemy movs
         //pour avoir l'angle entre 0 et 360
-        auto centerSsX = (_spaceShip.getShipLine().p1().x()+_spaceShip.getShipLine().p2().x())/2;
-        auto centerSsY = (_spaceShip.getShipLine().p1().y()+_spaceShip.getShipLine().p2().y())/2;
-        auto centerEnemyX = (_enemies[i].getShipLine().p1().x()+_enemies[i].getShipLine().p2().x())/2;
-        auto centerEnemyY = (_enemies[i].getShipLine().p1().y()+_enemies[i].getShipLine().p2().y())/2;
+        auto centerSsX = (_spaceShip.getLine().p1().x()+_spaceShip.getLine().p2().x())/2;
+        auto centerSsY = (_spaceShip.getLine().p1().y()+_spaceShip.getLine().p2().y())/2;
+        auto centerEnemyX = (_enemies[i].getLine().p1().x()+_enemies[i].getLine().p2().x())/2;
+        auto centerEnemyY = (_enemies[i].getLine().p1().y()+_enemies[i].getLine().p2().y())/2;
 
         QLine enemyToSsLine(QPoint(centerEnemyX,centerEnemyY),QPoint(centerSsX,centerSsY));
         double angleRadian=atan(double(abs(enemyToSsLine.dx()))/double(abs(enemyToSsLine.dy())));
@@ -200,30 +190,30 @@ void MinestormGame::drawEnemies(QPainter &painter){
                 }
         //pour avoir l'angle entre 0 et 360
         //
-        if((_enemies[i].getDirectionAngle())%360>=0)
+        if((_enemies[i].getAngle())%360>=0)
         {
-            if(360-((_enemies[i].getDirectionAngle())%360)>angleAtourner+5)
+            if(360-((_enemies[i].getAngle())%360)>angleAtourner+5)
             {
                 _enemies[i].turnLeft();
             }
             else
-                if(360-((_enemies[i].getDirectionAngle())%360)<angleAtourner-5)
+                if(360-((_enemies[i].getAngle())%360)<angleAtourner-5)
                 {
                     _enemies[i].turnRight();
                 }
         }
         else
-            if(abs((_enemies[i].getDirectionAngle())%360)>angleAtourner+5)
+            if(abs((_enemies[i].getAngle())%360)>angleAtourner+5)
             {
                 _enemies[i].turnLeft();
             }
             else
-                if(abs((_enemies[i].getDirectionAngle())%360)<angleAtourner-5)
+                if(abs((_enemies[i].getAngle())%360)<angleAtourner-5)
                 {
                     _enemies[i].turnRight();
                 }
 
-        //std::cout<<" | angle : "<<angleAtourner<<"|"<<(_enemies[i].getDirectionAngle())%360<<std::endl;
+        //std::cout<<" | angle : "<<angleAtourner<<"|"<<(_enemies[i].getAngle())%360<<std::endl;
         //painter.drawLine(enemyToSsLine);
         if(_enemyShootIntervalle >= 200){
             addEnemyBullet(_enemies[i].shoot());
@@ -233,42 +223,32 @@ void MinestormGame::drawEnemies(QPainter &painter){
         {
             _enemyShootIntervalle++;
         }
+
+
+        auto x = (_enemies[i].getLine().p1().x()-_enemies[i].getLine().p2().x()) / 40;
+        auto y = (_enemies[i].getLine().p1().y()-_enemies[i].getLine().p2().y()) / 40;
+        _enemies[i].setPointSpeed(QPoint(x,y));
+        QLine enemyLine(_enemies[i].getLine());
+        enemyLine.translate(_enemies[i].getPointSpeed());
+        _enemies[i].setLine(enemyLine);
+        //_enemies[i].setAngle(_enemies[i].getAngle());
+
         //enemy movs
     }
-
-    //enemies movs
-    for(auto i=0u; i<_enemies.size();i++)
-    {
-        auto x = (_enemies[i].getShipLine().p1().x()-_enemies[i].getShipLine().p2().x()) / 40;
-        auto y = (_enemies[i].getShipLine().p1().y()-_enemies[i].getShipLine().p2().y()) / 40;
-        _enemies[i].setPointSpeed(QPoint(x,y));
-        QLine enemyLine(_enemies[i].getShipLine());
-        enemyLine.translate(_enemies[i].getPointSpeed());
-        _enemies[i].setShipLine(enemyLine);
-        //_enemies[i].setDirectionAngle(_enemies[i].getDirectionAngle());
-
-    }
-
-    //enemies movs
 }
 
 void MinestormGame::drawMines(QPainter &painter)
 {
     for(auto i=0u;i<_mines.size();i++)
     {
-        //painter.drawLine(_mines[i].getMineLine());
-        painter.drawImage(QRect(QPoint(((_mines[i].getMineLine().p1().x()+_mines[i].getMineLine().p2().x())/2)-(_mines[i].getMineSize().width()/2),
-                                        ((_mines[i].getMineLine().p1().y()+_mines[i].getMineLine().p2().y())/2)-(_mines[i].getMineSize().height()/2))
-                                 ,_mines[i].getMineSize()),
-                          _mines[i].getMineImage());
+        _mines[i].draw(painter);
 
         //collision test : remove mine and spaceship _health decrease if collision
-        if(_mines[i].collideWithSpaceShip(_spaceShip.getShipLine()))
+        if(_mines[i].collision(_spaceShip))
         {
             _mines[i] = _mines.back();
             _mines.pop_back();
             _health=_health-10;
-            //std::cout<<"SpaceShip collide with mine"<<std::endl;
         }
         //collision test
     }
@@ -280,10 +260,10 @@ void MinestormGame::drawEnemiesBullets(QPainter &painter, QRect &rect)
 {
     for(auto i=0u;i < _enemiesBullets.size();i++) {
         /*if bullet out of screen, destroy bullet*/
-        if (_enemiesBullets[i].getBulletLine().p2().x() < 0
-                || _enemiesBullets[i].getBulletLine().p2().x() > rect.width()
-                || _enemiesBullets[i].getBulletLine().p2().y() < 0
-                || _enemiesBullets[i].getBulletLine().p2().y() > rect.height())
+        if (_enemiesBullets[i].getLine().p2().x() < 0
+                || _enemiesBullets[i].getLine().p2().x() > rect.width()
+                || _enemiesBullets[i].getLine().p2().y() < 0
+                || _enemiesBullets[i].getLine().p2().y() > rect.height())
         {
             _enemiesBullets[i] = _enemiesBullets.back();
             _enemiesBullets.pop_back();
@@ -291,43 +271,29 @@ void MinestormGame::drawEnemiesBullets(QPainter &painter, QRect &rect)
         /*else draw bullet*/
         else
         {
-            //painter.drawLine(_spaceShipBullets[i].getBulletLine());
-            painter.drawImage(QRect(QPoint(((_enemiesBullets[i].getBulletLine().p1().x()+_enemiesBullets[i].getBulletLine().p2().x())/2)-5,
-                                           ((_enemiesBullets[i].getBulletLine().p1().y()+_enemiesBullets[i].getBulletLine().p2().y())/2)-5),
-                                    QSize(10,10)),
-                              _enemiesBullets[i].getBulletImage());
+            _enemiesBullets[i].draw(painter);
+            _enemiesBullets[i].bang();
+            //collision test : remove bullet if collision
+            if(_enemiesBullets[i].collision(_spaceShip))
+            {
+                _enemiesBullets[i] = _enemiesBullets.back();
+                _enemiesBullets.pop_back();
+                _health=_health-5;
+                //std::cout<<"SpaceShip touché !"<< " Points de vie : " <<_health<<std::endl;
+            }
+            //collision test
         }
     }
-
-    //_enemiesBullets movs
-    for(auto i=0u;i < _enemiesBullets.size();i++) {
-        auto x = (_enemiesBullets[i].getBulletLine().p1().x()-_enemiesBullets[i].getBulletLine().p2().x()) / 2;
-        auto y = (_enemiesBullets[i].getBulletLine().p1().y()-_enemiesBullets[i].getBulletLine().p2().y()) / 2;
-        QLine bulletLine(_enemiesBullets[i].getBulletLine());
-        bulletLine.translate(QPoint(x,y));
-        _enemiesBullets[i].setBulletLine(bulletLine);
-
-        //collision test : remove bullet if collision
-        if(_enemiesBullets[i].collideWithSpaceShip(_spaceShip.getShipLine()))
-        {
-            _enemiesBullets[i] = _enemiesBullets.back();
-            _enemiesBullets.pop_back();
-            _health=_health-5;
-            //std::cout<<"SpaceShip touché !"<< " Points de vie : " <<_health<<std::endl;
-        }
-        //collision test
-    }
-    //_enemiesBullets movs
 }
 
 void MinestormGame::drawSpaceShipBullets(QPainter &painter, QRect &rect)
 {
     for(auto i=0u;i < _spaceShipBullets.size();i++) {
         /*if bullet out of screen, destroy bullet*/
-        if (_spaceShipBullets[i].getBulletLine().p2().x() < 0
-                || _spaceShipBullets[i].getBulletLine().p2().x() > rect.width()
-                || _spaceShipBullets[i].getBulletLine().p2().y() < 0
-                || _spaceShipBullets[i].getBulletLine().p2().y() > rect.height())
+        if (_spaceShipBullets[i].getLine().p2().x() < 0
+                || _spaceShipBullets[i].getLine().p2().x() > rect.width()
+                || _spaceShipBullets[i].getLine().p2().y() < 0
+                || _spaceShipBullets[i].getLine().p2().y() > rect.height())
         {
             _spaceShipBullets[i] = _spaceShipBullets.back();
             _spaceShipBullets.pop_back();
@@ -335,56 +301,39 @@ void MinestormGame::drawSpaceShipBullets(QPainter &painter, QRect &rect)
         /*else draw bullet*/
         else
         {
-            //painter.drawLine(_spaceShipBullets[i].getBulletLine());
-            painter.drawImage(QRect(QPoint(((_spaceShipBullets[i].getBulletLine().p1().x()+_spaceShipBullets[i].getBulletLine().p2().x())/2)-5,
-                                           ((_spaceShipBullets[i].getBulletLine().p1().y()+_spaceShipBullets[i].getBulletLine().p2().y())/2)-5),
-                                    QSize(10,10)),
-                              _spaceShipBullets[i].getBulletImage());
+            _spaceShipBullets[i].draw(painter);
+            _spaceShipBullets[i].bang();
+            //collision test : remove bullets and enemy if collision
+            for(auto j=0u;j<_enemies.size();j++)
+            {
+                if(_spaceShipBullets[i].collision(_enemies[j]))
+                {
+                    _spaceShipBullets[i] = _spaceShipBullets.back();
+                    _spaceShipBullets.pop_back();
+                    _enemies[j] = _enemies.back();
+                    _enemies.pop_back();
+                    j=_enemies.size();
+                    _score+=50;
+                }
+            }
+            //collision test
+
+            //collision test : remove bullet and mine if collision
+            for(auto j=0u;j<_mines.size();j++)
+            {
+                if(_spaceShipBullets[i].collision(_mines[j]))
+                {
+                    _spaceShipBullets[i] = _spaceShipBullets.back();
+                    _spaceShipBullets.pop_back();
+                    _mines[j] = _mines.back();
+                    _mines.pop_back();
+                    j=_mines.size();
+                    _score+=30;
+                }
+            }
+            //collision test
         }
     }
-
-    //_spaceShipBullets movs
-    for(auto i=0u;i < _spaceShipBullets.size();i++) {
-        auto x = (_spaceShipBullets[i].getBulletLine().p1().x()-_spaceShipBullets[i].getBulletLine().p2().x()) / 2;
-        auto y = (_spaceShipBullets[i].getBulletLine().p1().y()-_spaceShipBullets[i].getBulletLine().p2().y()) / 2;
-        QLine bulletLine(_spaceShipBullets[i].getBulletLine());
-        bulletLine.translate(QPoint(x,y));
-        _spaceShipBullets[i].setBulletLine(bulletLine);
-
-        //collision test : remove bullets and enemy if collision
-        for(auto j=0u;j<_enemies.size();j++)
-        {
-            if(_spaceShipBullets[i].collideWithSpaceShip(_enemies[j].getShipLine()))
-            {
-                _spaceShipBullets[i] = _spaceShipBullets.back();
-                _spaceShipBullets.pop_back();
-                _enemies[j] = _enemies.back();
-                _enemies.pop_back();
-                j=_enemies.size();
-
-                _score+=50;
-            }
-        }
-        //collision test
-
-
-        //collision test : remove bullet and mine if collision
-        for(auto j=0u;j<_mines.size();j++)
-        {
-            if(_spaceShipBullets[i].collideWithSpaceShip(_mines[j].getMineLine()))
-            {
-                _spaceShipBullets[i] = _spaceShipBullets.back();
-                _spaceShipBullets.pop_back();
-                _mines[j] = _mines.back();
-                _mines.pop_back();
-                j=_mines.size();
-                _score+=30;
-            }
-        }
-        //collision test
-
-    }
-    //_spaceShipBullets movs
 }
 
 void MinestormGame::drawHearth(QPainter &painter, QRect &rect)
@@ -400,8 +349,8 @@ void MinestormGame::drawHearth(QPainter &painter, QRect &rect)
 
         //collision test : remove hearth and spaceship _health +100 if collision
         int distance = 35;
-        auto xShip = (_spaceShip.getShipLine().p1().x()+_spaceShip.getShipLine().p2().x())/2;
-        auto yShip = (_spaceShip.getShipLine().p1().y()+_spaceShip.getShipLine().p2().y())/2;
+        auto xShip = (_spaceShip.getLine().p1().x()+_spaceShip.getLine().p2().x())/2;
+        auto yShip = (_spaceShip.getLine().p1().y()+_spaceShip.getLine().p2().y())/2;
         auto xHearth = _hearths[i].x();
         auto yHearth = _hearths[i].y();
 

@@ -1,6 +1,6 @@
 #include "spaceship.h"
 
-SpaceShip::SpaceShip(QLine& shipLine, QImage& shipImage):_shipLine(shipLine),_shipImage(shipImage)
+SpaceShip::SpaceShip(QLine& shipLine, QImage& shipImage): GameObject(shipLine,shipImage)
 {
 }
 
@@ -12,6 +12,14 @@ SpaceShip::SpaceShip()
 SpaceShip::~SpaceShip()
 {
     //std::cout<< "Destruction space ship" << std::endl;
+}
+
+void SpaceShip::draw(QPainter &painter)
+{
+    painter.drawLine(getLine());
+    painter.drawImage(QRect(QPoint(((getLine().p1().x()+getLine().p2().x())/2)-20,
+                                   ((getLine().p1().y()+getLine().p2().y())/2)-20),QSize(40,40)),
+                      getImage().transformed(QMatrix().rotate(-getAngle())));
 }
 
 void SpaceShip::accelerate()
@@ -43,61 +51,50 @@ void SpaceShip::turnLeft()
 {
     int angle = -10;
     //p1 rotate, middle of line p1 p2
-    QPoint ptRotatedP1 = rotatePoint(angle,
-                                   QPoint((_shipLine.p1().x()+_shipLine.p2().x())/2,(_shipLine.p1().y()+_shipLine.p2().y())/2),
-                                   _shipLine.p1());
+    QPoint ptRotatedP1 = GameObject::rotatePoint(angle,
+                                   QPoint((_line.p1().x()+_line.p2().x())/2,(_line.p1().y()+_line.p2().y())/2),
+                                   _line.p1());
 
-    QPoint ptRotatedP2 = rotatePoint(angle,
-                                     QPoint((_shipLine.p1().x()+_shipLine.p2().x())/2,(_shipLine.p1().y()+_shipLine.p2().y())/2),
-                                     _shipLine.p2());
+    QPoint ptRotatedP2 = GameObject::rotatePoint(angle,
+                                     QPoint((_line.p1().x()+_line.p2().x())/2,(_line.p1().y()+_line.p2().y())/2),
+                                     _line.p2());
 
-    _shipLine.setP1(ptRotatedP1);
-    _shipLine.setP2(ptRotatedP2);
-    _directionAngle = _directionAngle-angle;
+    _line.setP1(ptRotatedP1);
+    _line.setP2(ptRotatedP2);
+    _angle = _angle-angle;
 }
 
 void SpaceShip::turnRight()
 {
     int angle = 10;
-    QPoint ptRotatedP1 = rotatePoint(angle,
-                                   QPoint((_shipLine.p1().x()+_shipLine.p2().x())/2,(_shipLine.p1().y()+_shipLine.p2().y())/2),
-                                   _shipLine.p1());
+    QPoint ptRotatedP1 = GameObject::rotatePoint(angle,
+                                   QPoint((_line.p1().x()+_line.p2().x())/2,(_line.p1().y()+_line.p2().y())/2),
+                                   _line.p1());
 
-    QPoint ptRotatedP2 = rotatePoint(angle,
-                                     QPoint((_shipLine.p1().x()+_shipLine.p2().x())/2,(_shipLine.p1().y()+_shipLine.p2().y())/2),
-                                     _shipLine.p2());
-
-    _shipLine.setP1(ptRotatedP1);
-    _shipLine.setP2(ptRotatedP2);
-    _directionAngle = _directionAngle-angle;
+    QPoint ptRotatedP2 = GameObject::rotatePoint(angle,
+                                     QPoint((_line.p1().x()+_line.p2().x())/2,(_line.p1().y()+_line.p2().y())/2),
+                                     _line.p2());
+    _line.setP1(ptRotatedP1);
+    _line.setP2(ptRotatedP2);
+    _angle = _angle-angle;
 
 }
 
 Bullet SpaceShip::shoot()
 {
-    QLine line((_shipLine.p1().x() + _shipLine.p2().x())/2
-               ,(_shipLine.p1().y() + _shipLine.p2().y())/2
-               , _shipLine.p2().x()
-               , _shipLine.p2().y());
+    QLine line((_line.p1().x() + _line.p2().x())/2
+               ,(_line.p1().y() + _line.p2().y())/2
+               , _line.p2().x()
+               , _line.p2().y());
     QImage image("image/bullet.png");
     Bullet mBullet(line,image);
-    mBullet.setBulletImage(mBullet.getBulletImage().transformed(QMatrix().rotate(-_directionAngle)));
+    mBullet.setImage(mBullet.getImage().transformed(QMatrix().rotate(-_angle)));
     return mBullet;
 }
 
-QLine SpaceShip::getShipLine()
+int SpaceShip::getAngle()
 {
-    return _shipLine;
-}
-
-QImage SpaceShip::getShipImage()
-{
-    return _shipImage;
-}
-
-int SpaceShip::getDirectionAngle()
-{
-    return _directionAngle;
+    return _angle;
 }
 
 int SpaceShip::getSpeed()
@@ -115,19 +112,9 @@ void SpaceShip::setSpeed(int speed)
     _speed = speed;
 }
 
-void SpaceShip::setShipImage(QImage shipImage)
+void SpaceShip::setAngle(int angle)
 {
-    _shipImage = shipImage;
-}
-
-void SpaceShip::setDirectionAngle(int directionAngle)
-{
-    _directionAngle = directionAngle;
-}
-
-void SpaceShip::setShipLine(QLine shipLine)
-{
-    _shipLine.setLine(shipLine.p1().x(),shipLine.p1().y(),shipLine.p2().x(),shipLine.p2().y());
+    _angle = angle;
 }
 
 void SpaceShip::setPointSpeed(QPoint pointSpeed)
@@ -136,50 +123,33 @@ void SpaceShip::setPointSpeed(QPoint pointSpeed)
     _pointSpeed.setY(pointSpeed.y());
 }
 
-QPoint SpaceShip::rotatePoint(int degree, QPoint origin, QPoint ptRotate) {
-    double radianAngle = (degree * M_PI) / 180.0;
-    double sinAngle = sin(radianAngle);
-    double cosAngle = cos(radianAngle);
-
-    int px = ptRotate.x() - origin.x();
-    int py = ptRotate.y() - origin.y();
-
-    float xnew = px * cosAngle - py * sinAngle;
-    float ynew = py * cosAngle + px * sinAngle;
-
-    px = xnew + origin.x();
-    py = ynew + origin.y();
-
-    return QPoint(px, py);
-}
-
 void SpaceShip::spaceShipOverScreenControle(int width, int height)
 {
-    int x1 = getShipLine().p1().x();
-    int y1 = getShipLine().p1().y();
-    int x2 = getShipLine().p2().x();
-    int y2 = getShipLine().p2().y();
+    int x1 = getLine().p1().x();
+    int y1 = getLine().p1().y();
+    int x2 = getLine().p2().x();
+    int y2 = getLine().p2().y();
 
     //overscreen right
-    if(getShipLine().p1().x() > width)
+    if(getLine().p1().x() > width)
     {
         x1 = x1 - width;
         x2 = x2 - width;
     }
     //overscreen left
-    if(getShipLine().p1().x() < 0)
+    if(getLine().p1().x() < 0)
     {
         x1 = x1 + width;
         x2 = x2 + width;
     }
     //overscreen top
-    if(getShipLine().p1().y() < 0)
+    if(getLine().p1().y() < 0)
     {
         y1 = y1 + height;
         y2 = y2 + height;
     }
     //overscreen bottom
-    if(getShipLine().p1().y() > height)
+    if(getLine().p1().y() > height)
     {
         y1 = y1 - height;
         y2 = y2 - height;
@@ -187,6 +157,6 @@ void SpaceShip::spaceShipOverScreenControle(int width, int height)
 
     QPoint p1(x1,y1);
     QPoint p2(x2,y2);
-    setShipLine(QLine(p1,p2));
+    setLine(QLine(p1,p2));
 }
 

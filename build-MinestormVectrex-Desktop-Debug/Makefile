@@ -53,7 +53,8 @@ SOURCES       = ../main.cpp \
 		../game/minestormgame.cpp \
 		../objects/bullet.cpp \
 		../objects/mine.cpp \
-		../objects/spaceship.cpp moc_mainwindow.cpp \
+		../objects/spaceship.cpp \
+		../objects/gameobject.cpp moc_mainwindow.cpp \
 		moc_controller.cpp \
 		moc_game.cpp \
 		moc_gameboard.cpp \
@@ -67,6 +68,7 @@ OBJECTS       = main.o \
 		bullet.o \
 		mine.o \
 		spaceship.o \
+		gameobject.o \
 		moc_mainwindow.o \
 		moc_controller.o \
 		moc_game.o \
@@ -306,7 +308,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Minestorm_Game_by_NTuan1.0.0 || mkdir -p .tmp/Minestorm_Game_by_NTuan1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../mainwindow.h ../game/controller.h ../game/game.h ../game/gameboard.h ../game/minestormgame.h ../objects/bullet.h ../objects/mine.h ../objects/spaceship.h .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../mainwindow.cpp ../game/controller.cpp ../game/game.cpp ../game/gameboard.cpp ../game/minestormgame.cpp ../objects/bullet.cpp ../objects/mine.cpp ../objects/spaceship.cpp .tmp/Minestorm_Game_by_NTuan1.0.0/ && (cd `dirname .tmp/Minestorm_Game_by_NTuan1.0.0` && $(TAR) Minestorm_Game_by_NTuan1.0.0.tar Minestorm_Game_by_NTuan1.0.0 && $(COMPRESS) Minestorm_Game_by_NTuan1.0.0.tar) && $(MOVE) `dirname .tmp/Minestorm_Game_by_NTuan1.0.0`/Minestorm_Game_by_NTuan1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Minestorm_Game_by_NTuan1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../mainwindow.h ../game/controller.h ../game/game.h ../game/gameboard.h ../game/minestormgame.h ../objects/bullet.h ../objects/mine.h ../objects/spaceship.h ../objects/gameobject.h .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../mainwindow.cpp ../game/controller.cpp ../game/game.cpp ../game/gameboard.cpp ../game/minestormgame.cpp ../objects/bullet.cpp ../objects/mine.cpp ../objects/spaceship.cpp ../objects/gameobject.cpp .tmp/Minestorm_Game_by_NTuan1.0.0/ && (cd `dirname .tmp/Minestorm_Game_by_NTuan1.0.0` && $(TAR) Minestorm_Game_by_NTuan1.0.0.tar Minestorm_Game_by_NTuan1.0.0 && $(COMPRESS) Minestorm_Game_by_NTuan1.0.0.tar) && $(MOVE) `dirname .tmp/Minestorm_Game_by_NTuan1.0.0`/Minestorm_Game_by_NTuan1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Minestorm_Game_by_NTuan1.0.0
 
 
 clean:compiler_clean 
@@ -837,6 +839,7 @@ moc_minestormgame.cpp: ../game/game.h \
 		/usr/include/qt5/QtGui/qfontmetrics.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
+		../objects/gameobject.h \
 		../objects/mine.h \
 		../game/minestormgame.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../game/minestormgame.h -o moc_minestormgame.cpp
@@ -985,6 +988,7 @@ main.o: ../main.cpp ../mainwindow.h \
 		/usr/include/qt5/QtGui/qpen.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
+		../objects/gameobject.h \
 		../objects/mine.h \
 		/usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtWidgets/qapplication.h \
@@ -1539,6 +1543,7 @@ minestormgame.o: ../game/minestormgame.cpp ../game/minestormgame.h \
 		/usr/include/qt5/QtGui/qfontmetrics.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
+		../objects/gameobject.h \
 		../objects/mine.h \
 		/usr/include/qt5/QtGui/QColor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o minestormgame.o ../game/minestormgame.cpp
@@ -1791,8 +1796,92 @@ spaceship.o: ../objects/spaceship.cpp ../objects/spaceship.h \
 		/usr/include/qt5/QtCore/qstringlist.h \
 		/usr/include/qt5/QtCore/qregexp.h \
 		/usr/include/qt5/QtCore/qstringmatcher.h \
-		../objects/bullet.h
+		../objects/bullet.h \
+		../objects/gameobject.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o spaceship.o ../objects/spaceship.cpp
+
+gameobject.o: ../objects/gameobject.cpp ../objects/gameobject.h \
+		/usr/include/qt5/QtCore/QLine \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtCore/qpoint.h \
+		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qglobal.h \
+		/usr/include/qt5/QtCore/qconfig.h \
+		/usr/include/qt5/QtCore/qfeatures.h \
+		/usr/include/qt5/QtCore/qsystemdetection.h \
+		/usr/include/qt5/QtCore/qprocessordetection.h \
+		/usr/include/qt5/QtCore/qcompilerdetection.h \
+		/usr/include/qt5/QtCore/qglobalstatic.h \
+		/usr/include/qt5/QtCore/qatomic.h \
+		/usr/include/qt5/QtCore/qbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_bootstrap.h \
+		/usr/include/qt5/QtCore/qgenericatomic.h \
+		/usr/include/qt5/QtCore/qatomic_msvc.h \
+		/usr/include/qt5/QtCore/qatomic_integrity.h \
+		/usr/include/qt5/QtCore/qoldbasicatomic.h \
+		/usr/include/qt5/QtCore/qatomic_vxworks.h \
+		/usr/include/qt5/QtCore/qatomic_power.h \
+		/usr/include/qt5/QtCore/qatomic_alpha.h \
+		/usr/include/qt5/QtCore/qatomic_armv7.h \
+		/usr/include/qt5/QtCore/qatomic_armv6.h \
+		/usr/include/qt5/QtCore/qatomic_armv5.h \
+		/usr/include/qt5/QtCore/qatomic_bfin.h \
+		/usr/include/qt5/QtCore/qatomic_ia64.h \
+		/usr/include/qt5/QtCore/qatomic_mips.h \
+		/usr/include/qt5/QtCore/qatomic_s390.h \
+		/usr/include/qt5/QtCore/qatomic_sh4a.h \
+		/usr/include/qt5/QtCore/qatomic_sparc.h \
+		/usr/include/qt5/QtCore/qatomic_gcc.h \
+		/usr/include/qt5/QtCore/qatomic_x86.h \
+		/usr/include/qt5/QtCore/qatomic_cxx11.h \
+		/usr/include/qt5/QtCore/qatomic_unix.h \
+		/usr/include/qt5/QtCore/qmutex.h \
+		/usr/include/qt5/QtCore/qlogging.h \
+		/usr/include/qt5/QtCore/qflags.h \
+		/usr/include/qt5/QtCore/qtypeinfo.h \
+		/usr/include/qt5/QtCore/qtypetraits.h \
+		/usr/include/qt5/QtCore/qsysinfo.h \
+		/usr/include/qt5/QtCore/QPoint \
+		/usr/include/qt5/QtGui/QImage \
+		/usr/include/qt5/QtGui/qimage.h \
+		/usr/include/qt5/QtGui/qtransform.h \
+		/usr/include/qt5/QtGui/qmatrix.h \
+		/usr/include/qt5/QtGui/qpolygon.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtCore/qalgorithms.h \
+		/usr/include/qt5/QtCore/qiterator.h \
+		/usr/include/qt5/QtCore/qlist.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qrect.h \
+		/usr/include/qt5/QtCore/qsize.h \
+		/usr/include/qt5/QtGui/qregion.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qscopedpointer.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qobject.h \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtCore/qcoreevent.h \
+		/usr/include/qt5/QtCore/qmetatype.h \
+		/usr/include/qt5/QtCore/qvarlengtharray.h \
+		/usr/include/qt5/QtCore/qcontainerfwd.h \
+		/usr/include/qt5/QtCore/qisenum.h \
+		/usr/include/qt5/QtCore/qobject_impl.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtGui/qpainterpath.h \
+		/usr/include/qt5/QtGui/qpaintdevice.h \
+		/usr/include/qt5/QtGui/qrgb.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameobject.o ../objects/gameobject.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

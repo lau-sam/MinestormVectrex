@@ -1,12 +1,8 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
 
-#include <QLine>
-#include <QPoint>
-#include <math.h>
-#include <QImage>
-#include <iostream>
 #include "bullet.h"
+#include "gameobject.h"
 
 /**
  * @brief La classe SpaceShip représente l'objet SpaceShip
@@ -15,7 +11,7 @@
  * - accelerate/breakdown/turnLeft/turnRight
  * - gestion de tire utilisant une liste d'objets de type Bullet
 */
-class SpaceShip
+class SpaceShip : public GameObject
 {
 public:
     /**
@@ -33,6 +29,7 @@ public:
      * @brief ~SpaceShip détruit le vaisseau
      */
     ~SpaceShip();
+    void draw(QPainter &painter);
     /**
      * @brief accelerate augmente la vitesse du vaisseau
      * en réduisant la variable _speed
@@ -46,11 +43,11 @@ public:
      */
     void breakdown();
     /**
-     * @brief turnLeft tourne la ligne _shipLine à gauche d'angle _directionAngle
+     * @brief turnLeft tourne la ligne _shipLine à gauche d'angle _angle
      */
     void turnLeft();
     /**
-     * @brief turnRight tourne la ligne _shipLine à droite d'angle _directionAngle
+     * @brief turnRight tourne la ligne _shipLine à droite d'angle _angle
      */
     void turnRight();
     /**
@@ -66,32 +63,17 @@ public:
      */
     void spaceShipOverScreenControle(int width, int height);
     //getters
-    QLine getShipLine();
-    QImage getShipImage();
-    int getDirectionAngle();
+    int getAngle();
     int getSpeed();
     QPoint getPointSpeed();
     //setters
     void setSpeed(int speed);
-    void setShipImage(QImage shipImage);
-    void setDirectionAngle(int directionAngle);
-    void setShipLine(QLine shipLine);
+    void setAngle(int angle);
     void setPointSpeed(QPoint pointSpeed);
 
 private:
-    /**
-     * @brief rotatePoint faire une rotation du QPoint ptRotate autour du QPoint origin un angle degree
-     * @param degree l'angle de rotation
-     * @param origin QPoint representant le point central
-     * @param ptRotate QPoint representant le point à appliquer la rotation
-     * @return QPoint représentant les nouvelles coordonnées du QPoint ptRotate
-     */
-    QPoint rotatePoint(int degree, QPoint origin, QPoint ptRotate);
-
-    QLine _shipLine;
-    QImage _shipImage;
     QPoint _pointSpeed;
-    int _directionAngle;
+    int _angle;
     int _speed;
 };
 

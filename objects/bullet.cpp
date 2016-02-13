@@ -1,6 +1,6 @@
 #include "bullet.h"
 
-Bullet::Bullet(QLine& bulletLine, QImage& bulletImage):_bulletLine(bulletLine),_bulletImage(bulletImage)
+Bullet::Bullet(QLine& bulletLine, QImage& bulletImage):GameObject(bulletLine,bulletImage)
 {
 }
 
@@ -11,37 +11,20 @@ Bullet::~Bullet()
 {
 }
 
-bool Bullet::collideWithSpaceShip(QLine spaceShipLine)
+void Bullet::draw(QPainter &painter)
 {
-    int distance = 40;
-    bool collide = false;
-    auto xShip = (spaceShipLine.p1().x()+spaceShipLine.p2().x())/2;
-    auto yShip = (spaceShipLine.p1().y()+spaceShipLine.p2().y())/2;
-    auto xBullet = (_bulletLine.p1().x()+_bulletLine.p2().x())/2;
-    auto yBullet = (_bulletLine.p1().y()+_bulletLine.p2().y())/2;
-    if(abs(xShip-xBullet) < distance && abs(yShip-yBullet) < distance)
-    {
-        collide = true;
-    }
-    return collide;
+    painter.drawLine(getLine());
+    painter.drawImage(QRect(QPoint(((getLine().p1().x()+getLine().p2().x())/2)-10,
+                                   ((getLine().p1().y()+getLine().p2().y())/2)-10),
+                            QSize(20,20)),
+                      getImage());
 }
 
-QLine Bullet::getBulletLine()
+void Bullet::bang()
 {
-    return _bulletLine;
-}
-
-QImage Bullet::getBulletImage()
-{
-    return _bulletImage;
-}
-
-void Bullet::setBulletLine(QLine bulletLine)
-{
-    _bulletLine.setLine(bulletLine.p1().x(),bulletLine.p1().y(),bulletLine.p2().x(),bulletLine.p2().y());
-}
-
-void Bullet::setBulletImage(QImage bulletImage)
-{
-    _bulletImage = bulletImage;
+    auto x = (getLine().p1().x()-getLine().p2().x()) / 2;
+    auto y = (getLine().p1().y()-getLine().p2().y()) / 2;
+    QLine bulletLine(getLine());
+    bulletLine.translate(QPoint(x,y));
+    setLine(bulletLine);
 }

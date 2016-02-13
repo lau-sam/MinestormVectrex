@@ -35,12 +35,6 @@ private:
     virtual void step();
     void initialize();
     /**
-     * @brief boolToString
-     * @param b bool to convert
-     * @return
-     */
-    const char * boolToString(bool b);
-    /**
      * @brief addSpaceShipBullet ajoute un objet Bullet à la liste _spaceShipBullets
      * @param bullet l'objet Bullet à ajouter
      */

@@ -1,10 +1,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include <QPoint>
-#include <QImage>
-#include <iostream>
-#include <QLine>
+#include "gameobject.h"
 
 /**
  * @author Tuan Nguyen <nguyen.tuan.contact@gmail.com>
@@ -12,7 +9,7 @@
  * Une balle est définie par sa ligne et une image de balle
 */
 
-class Bullet
+class Bullet : public GameObject
 {
 public:
     /**
@@ -29,22 +26,8 @@ public:
      * @brief ~Bullet destructeur de Bullet
      */
     ~Bullet();
-    /**
-     * @brief collideWithSpaceShip test s'il y a une collision entre la balle et un vaisseau
-     * @param spaceShip to test
-     * @return true if collision
-     */
-    bool collideWithSpaceShip(QLine spaceShipLine);
-    //getters
-    QLine getBulletLine();
-    QImage getBulletImage();
-    //setters
-    void setBulletLine(QLine bulletLine);
-    void setBulletImage(QImage bulletImage);
-
-private:
-    QLine _bulletLine;
-    QImage _bulletImage;
+    void draw(QPainter &painter);
+    void bang();
 };
 
 #endif // BULLET_H
