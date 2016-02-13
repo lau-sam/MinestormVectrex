@@ -18,8 +18,8 @@ void MinestormGame::initialize() {
     _hearths.clear();
     _currentStyle = Qt::SolidPattern;
     //spaceship
-    _spaceShip.setImage(QImage("image/mario.png"));
-    _spaceShip.setLine(QLine(500,320,500,280));
+    _spaceShip.setImage(QImage("image/spaceship.png"));
+    _spaceShip.setLine(QLine(500,280,500,320));
     _spaceShip.setAngle(180);
     _spaceShip.setPointSpeed(QPoint(0,0));
     _spaceShip.setSpeed(45);
@@ -56,7 +56,7 @@ void MinestormGame::draw(QPainter &painter, QRect &rect)
         {
             //showCinematics(painter,rect);
 
-            painter.drawImage(rect,QImage("image/background.png"));
+            //painter.drawImage(rect,QImage("image/background.png"));
             /*show score*/
             drawScore(painter,rect);
             testKeys();
@@ -374,10 +374,6 @@ void MinestormGame::drawHearth(QPainter &painter, QRect &rect)
 
 void MinestormGame::drawScore(QPainter &painter, QRect &rect)
 {
-
-    painter.setPen(QColor(0,0,0));
-    QBrush brush(QColor(0,0,0),_currentStyle);
-    painter.setBrush(brush);
     std::stringstream score;
     score << "PV : " << _health<<"\nScore : "<<_score;
     //painter.drawText(QRect(10,10,200,20), Qt::AlignCenter, tr(stream.str().c_str()));
@@ -413,7 +409,7 @@ void MinestormGame::showCinematics(QPainter &painter, QRect &rect)
     {
         painter.drawText(QRect(0,rect.height()/5,rect.width(),rect.height()), Qt::AlignHCenter, tr(presentationText.str().c_str()));
         painter.drawImage(QRect(QPoint((rect.width()/5)*2.2,(rect.height()/5)*3.5),QSize((rect.height()/5),(rect.height()/5)))
-                          ,QImage("image/mario.png").transformed((QMatrix().rotate(180))));
+                          ,QImage("image/spaceship.png").transformed((QMatrix().rotate(180))));
     }
 }
 

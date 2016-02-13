@@ -17,7 +17,7 @@ Mine::~Mine()
 
 void Mine::draw(QPainter &painter)
 {
-    painter.drawLine(getLine());
+    //painter.drawLine(getLine());
     painter.drawImage(QRect(QPoint(((getLine().p1().x()+getLine().p2().x())/2)-(getMineSize().width()/2),
                                     ((getLine().p1().y()+getLine().p2().y())/2)-(getMineSize().height()/2))
                              ,getMineSize()),

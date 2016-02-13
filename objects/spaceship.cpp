@@ -16,7 +16,7 @@ SpaceShip::~SpaceShip()
 
 void SpaceShip::draw(QPainter &painter)
 {
-    painter.drawLine(getLine());
+    //painter.drawLine(getLine());
     painter.drawImage(QRect(QPoint(((getLine().p1().x()+getLine().p2().x())/2)-20,
                                    ((getLine().p1().y()+getLine().p2().y())/2)-20),QSize(40,40)),
                       getImage().transformed(QMatrix().rotate(-getAngle())));
