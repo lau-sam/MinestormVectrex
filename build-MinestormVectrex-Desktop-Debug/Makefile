@@ -54,7 +54,8 @@ SOURCES       = ../main.cpp \
 		../objects/bullet.cpp \
 		../objects/mine.cpp \
 		../objects/spaceship.cpp \
-		../objects/gameobject.cpp moc_mainwindow.cpp \
+		../objects/gameobject.cpp qrc_res.cpp \
+		moc_mainwindow.cpp \
 		moc_controller.cpp \
 		moc_game.cpp \
 		moc_gameboard.cpp \
@@ -69,6 +70,7 @@ OBJECTS       = main.o \
 		mine.o \
 		spaceship.o \
 		gameobject.o \
+		qrc_res.o \
 		moc_mainwindow.o \
 		moc_controller.o \
 		moc_game.o \
@@ -136,6 +138,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../MinestormVectrex.pro \
+		../../res.qrc \
 		../MinestormVectrex.pro
 QMAKE_TARGET  = Minestorm_Game_by_NTuan
 DESTDIR       = #avoid trailing-slash linebreak
@@ -232,6 +235,7 @@ Makefile: ../MinestormVectrex.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../MinestormVectrex.pro \
+		../res.qrc \
 		/usr/lib/x86_64-linux-gnu/libQt5Widgets.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Gui.prl \
 		/usr/lib/x86_64-linux-gnu/libQt5Core.prl
@@ -298,6 +302,7 @@ Makefile: ../MinestormVectrex.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g+
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf:
 ../MinestormVectrex.pro:
+../res.qrc:
 /usr/lib/x86_64-linux-gnu/libQt5Widgets.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Gui.prl:
 /usr/lib/x86_64-linux-gnu/libQt5Core.prl:
@@ -308,7 +313,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/Minestorm_Game_by_NTuan1.0.0 || mkdir -p .tmp/Minestorm_Game_by_NTuan1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../mainwindow.h ../game/controller.h ../game/game.h ../game/gameboard.h ../game/minestormgame.h ../objects/bullet.h ../objects/mine.h ../objects/spaceship.h ../objects/gameobject.h .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../mainwindow.cpp ../game/controller.cpp ../game/game.cpp ../game/gameboard.cpp ../game/minestormgame.cpp ../objects/bullet.cpp ../objects/mine.cpp ../objects/spaceship.cpp ../objects/gameobject.cpp .tmp/Minestorm_Game_by_NTuan1.0.0/ && (cd `dirname .tmp/Minestorm_Game_by_NTuan1.0.0` && $(TAR) Minestorm_Game_by_NTuan1.0.0.tar Minestorm_Game_by_NTuan1.0.0 && $(COMPRESS) Minestorm_Game_by_NTuan1.0.0.tar) && $(MOVE) `dirname .tmp/Minestorm_Game_by_NTuan1.0.0`/Minestorm_Game_by_NTuan1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Minestorm_Game_by_NTuan1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../res.qrc .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../mainwindow.h ../game/controller.h ../game/game.h ../game/gameboard.h ../game/minestormgame.h ../objects/bullet.h ../objects/mine.h ../objects/spaceship.h ../objects/gameobject.h .tmp/Minestorm_Game_by_NTuan1.0.0/ && $(COPY_FILE) --parents ../main.cpp ../mainwindow.cpp ../game/controller.cpp ../game/game.cpp ../game/gameboard.cpp ../game/minestormgame.cpp ../objects/bullet.cpp ../objects/mine.cpp ../objects/spaceship.cpp ../objects/gameobject.cpp .tmp/Minestorm_Game_by_NTuan1.0.0/ && (cd `dirname .tmp/Minestorm_Game_by_NTuan1.0.0` && $(TAR) Minestorm_Game_by_NTuan1.0.0.tar Minestorm_Game_by_NTuan1.0.0 && $(COMPRESS) Minestorm_Game_by_NTuan1.0.0.tar) && $(MOVE) `dirname .tmp/Minestorm_Game_by_NTuan1.0.0`/Minestorm_Game_by_NTuan1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/Minestorm_Game_by_NTuan1.0.0
 
 
 clean:compiler_clean 
@@ -329,8 +334,14 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_res.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_res.cpp
+qrc_res.cpp: ../res.qrc \
+		../fonts/Mario256.ttf \
+		../fonts/GBA.ttf
+	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name res ../res.qrc -o qrc_res.cpp
+
 compiler_moc_header_make_all: moc_mainwindow.cpp moc_controller.cpp moc_game.cpp moc_gameboard.cpp moc_minestormgame.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_mainwindow.cpp moc_controller.cpp moc_game.cpp moc_gameboard.cpp moc_minestormgame.cpp
@@ -837,6 +848,9 @@ moc_minestormgame.cpp: ../game/game.h \
 		/usr/include/qt5/QtGui/qfontinfo.h \
 		/usr/include/qt5/QtGui/qfont.h \
 		/usr/include/qt5/QtGui/qfontmetrics.h \
+		/usr/include/qt5/QtGui/QFont \
+		/usr/include/qt5/QtGui/QFontDatabase \
+		/usr/include/qt5/QtGui/qfontdatabase.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
 		../objects/gameobject.h \
@@ -854,7 +868,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -986,6 +1000,9 @@ main.o: ../main.cpp ../mainwindow.h \
 		/usr/include/qt5/QtGui/qpainter.h \
 		/usr/include/qt5/QtGui/qtextoption.h \
 		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/QFont \
+		/usr/include/qt5/QtGui/QFontDatabase \
+		/usr/include/qt5/QtGui/qfontdatabase.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
 		../objects/gameobject.h \
@@ -1541,6 +1558,9 @@ minestormgame.o: ../game/minestormgame.cpp ../game/minestormgame.h \
 		/usr/include/qt5/QtGui/qfontinfo.h \
 		/usr/include/qt5/QtGui/qfont.h \
 		/usr/include/qt5/QtGui/qfontmetrics.h \
+		/usr/include/qt5/QtGui/QFont \
+		/usr/include/qt5/QtGui/QFontDatabase \
+		/usr/include/qt5/QtGui/qfontdatabase.h \
 		../objects/spaceship.h \
 		../objects/bullet.h \
 		../objects/gameobject.h \
@@ -1940,6 +1960,9 @@ gameobject.o: ../objects/gameobject.cpp ../objects/gameobject.h \
 		/usr/include/qt5/QtGui/qfont.h \
 		/usr/include/qt5/QtGui/qfontmetrics.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameobject.o ../objects/gameobject.cpp
+
+qrc_res.o: qrc_res.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_res.o qrc_res.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

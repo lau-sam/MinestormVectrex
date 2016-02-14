@@ -9,6 +9,8 @@
 #include <QRect>
 #include <QLine>
 #include <QPainter>
+#include <QFont>
+#include <QFontDatabase>
 #include "objects/spaceship.h"
 #include "objects/mine.h"
 #include <sstream>
@@ -101,6 +103,7 @@ private:
      * @param rect
      */
     void showCinematics(QPainter &painter, QRect &rect);
+    void drawExplosion(QPainter &painter);
 
     vector<SpaceShip> _enemies;
     SpaceShip _spaceShip;
@@ -109,6 +112,7 @@ private:
     vector<Bullet> _enemiesBullets;
     vector<Mine> _mines;
     vector<QPoint> _hearths;
+    vector<QPoint> _explosions;
     int _hearthGenerateTime;
     int _spaceShipShootControl;
     int _enemyShootIntervalle;
@@ -122,6 +126,7 @@ private:
     bool _keyS;
     bool _keyR;
     bool _gamePaused;
+    QFont _font;
 
 };
 

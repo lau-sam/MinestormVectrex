@@ -33,3 +33,6 @@ HEADERS  += mainwindow.h \
 FORMS    +=
 
 OTHER_FILES +=
+
+RESOURCES += \
+    res.qrc

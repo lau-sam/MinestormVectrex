@@ -16,6 +16,7 @@ void MinestormGame::initialize() {
     _enemies.clear();
     _mines.clear();
     _hearths.clear();
+    _explosions.clear();
     _currentStyle = Qt::SolidPattern;
     //spaceship
     _spaceShip.setImage(QImage("image/spaceships/0.png"));
@@ -37,6 +38,11 @@ void MinestormGame::initialize() {
     _keyS = false;
     _keyUp = false;
     _gamePaused = false;
+    int id = QFontDatabase::addApplicationFont(":/fonts/Mario256.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont Mario(family);
+    Mario.setPixelSize(20);
+    _font = Mario;
 }
 
 void MinestormGame::step() {
@@ -44,9 +50,10 @@ void MinestormGame::step() {
 }
 
 void MinestormGame::draw(QPainter &painter, QRect &rect)
-{    
+{
     painter.fillRect(rect, QColor(0,0,0));
     painter.setPen(QColor(255,255,255));
+    painter.setFont(_font);
     QBrush brush(QColor(255,255,255),_currentStyle);
     painter.setBrush(brush);
     if(this->isRunning())
@@ -60,6 +67,7 @@ void MinestormGame::draw(QPainter &painter, QRect &rect)
             /*show score*/
             drawScore(painter,rect);
             testKeys();
+            //drawExplosion(painter);
             drawSpaceShip(painter);
             drawEnemies(painter);
             drawEnemiesBullets(painter,rect);
@@ -309,13 +317,15 @@ void MinestormGame::drawSpaceShipBullets(QPainter &painter, QRect &rect)
             for(auto j=0u;j<_enemies.size();j++)
             {
                 if(_spaceShipBullets[i].collision(_enemies[j]))
-                {
+                {                    
+                    _explosions.push_back(_enemies[j].getCenter());
                     _spaceShipBullets[i] = _spaceShipBullets.back();
                     _spaceShipBullets.pop_back();
                     _enemies[j] = _enemies.back();
                     _enemies.pop_back();
                     j=_enemies.size();
                     _score+=50;
+
                 }
             }
             //collision test
@@ -386,16 +396,15 @@ void MinestormGame::showCinematics(QPainter &painter, QRect &rect)
 {
     painter.fillRect(rect, QColor(0,0,0));
     std::stringstream presentationText;
-    presentationText<<"Welcome to Minestorm Vectrex game original version";
+    presentationText<<"Welcome to Minestorm Vectrex";
     presentationText<<"\nby TN";
-    presentationText<<"\n\nS : Shoot | Enter : Start / Pause / Re-initialize | R : Restart";
-    presentationText<<"\n\nSe prendre une balle : -5 pv";
-    presentationText<<"\nSe prendre une mine : -10 pv";
-    presentationText<<"\nCoeur pris : +30 pv";
-    presentationText<<"\n\nEnemy tué : 50 pts";
-    presentationText<<"\nMine touchée : 30 pts";
+    presentationText<<"\n\nS : Shoot";
+    presentationText<<"\nR : Restart";
+    presentationText<<"\nEnter : Start / Pause / Re-initialize";
+    presentationText<<"\n\nBalle : -5 pv";
+    presentationText<<"\nMine : -10 pv";
+    presentationText<<"\nCoeur : +30 pv";
 
-    painter.setFont(QFont("default", 15, -1, false));
     if(_health<=0)
     {
         std::stringstream score;
@@ -412,6 +421,14 @@ void MinestormGame::showCinematics(QPainter &painter, QRect &rect)
         painter.drawText(QRect(0,rect.height()/5,rect.width(),rect.height()), Qt::AlignHCenter, tr(presentationText.str().c_str()));
         painter.drawImage(QRect(QPoint((rect.width()/5)*2.2,(rect.height()/5)*3.5),QSize((rect.height()/5),(rect.height()/5)))
                           ,QImage("image/spaceships/0.png").transformed((QMatrix().rotate(180))));
+    }
+}
+
+void MinestormGame::drawExplosion(QPainter &painter)
+{
+    for (auto i=0u; i<_explosions.size();i++)
+    {
+        painter.drawPoint(_explosions[i]);
     }
 }
 

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/GBA.ttf</file>
+        <file>fonts/Mario256.ttf</file>
+    </qresource>
+</RCC>

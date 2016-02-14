@@ -8,6 +8,11 @@ GameObject::GameObject(QLine line, QImage image):_line(line), _image(image)
 {
 }
 
+QPoint GameObject::getCenter()
+{
+    return QPoint((_line.p1().x()+_line.p2().x())/2,(_line.p1().y()+_line.p2().y())/2);
+}
+
 QLine GameObject::getLine()
 {
     return _line;

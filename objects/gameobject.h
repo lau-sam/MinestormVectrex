@@ -15,6 +15,7 @@ public:
     GameObject(QLine line, QImage image);
     void draw(QPainter &painter);
     //getters setters
+    QPoint getCenter();
     QLine getLine();
     QImage getImage();
     void setLine(QLine line);
